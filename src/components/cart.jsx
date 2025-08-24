@@ -1,14 +1,18 @@
 import React from "react";
-import thumbnail from "../images/image-product-1-thumbnail.jpg";
 import iconDelete from "../images/icon-delete.svg";
 
-function Cart() {
-  const text = "Autumn Limited Edition Sneakers";
+function Cart({ cartItems, handleRemoveFromCart, openCart }) {
   return (
     <>
       <article
-        className="bg-white rounded-2xl shadow-2xl 
-        p-8 absolute right-8 top-32 left-8 lg:w-96 lg:left-auto lg:top-20"
+        className={`bg-white rounded-2xl shadow-2xl 
+        p-8 absolute right-8 top-32 left-8 lg:w-96 lg:left-auto lg:top-20
+        transition-all duration-300 
+        transform ${
+          openCart
+            ? "scale-100 opacity-100"
+            : "scale-95 opacity-0 pointer-events-none"
+        }`}
         style={{
           zIndex: 1000,
         }}
@@ -20,28 +24,52 @@ function Cart() {
           Cart
         </h2>
 
-        <div className="flex items-center justify-between">
-          <img src={thumbnail} alt="" className="rounded-lg w-14" />
-          <ul>
-            <li className="text-slate-600">{`${text.substring(0, 23)}...`}</li>
-            <li className="text-slate-600">
-              $125.00 x 3{" "}
-              <span className="font-bold text-slate-900">$375.00</span>
-            </li>
-          </ul>
+        {cartItems.length === 0 ? (
+          <div className="h-20 flex items-center justify-center">
+            <p className="text-center text-slate-500">Your Cart is empty</p>
+          </div>
+        ) : (
+          <div>
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between mb-6"
+              >
+                <img
+                  src={item.thumbnail}
+                  alt={item.name}
+                  className="rounded-lg w-14"
+                />
+                <ul>
+                  <li className="text-slate-600 truncate max-w-[150px]">
+                    {item.name}
+                  </li>
+                  <li className="text-slate-600">
+                    ${item.price.toFixed(2)} x {item.quantity}{" "}
+                    <span className="font-bold text-slate-900">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </span>
+                  </li>
+                </ul>
+                <button onClick={() => handleRemoveFromCart(item.id)}>
+                  <img
+                    src={iconDelete}
+                    alt="Delete item"
+                    className="w-4 h-4 hover:opacity-70 transition-opacity duration-200"
+                  />
+                </button>
+              </div>
+            ))}
 
-          <button>
-            <img src={iconDelete} alt="" />
-          </button>
-        </div>
-
-        <button
-          className="w-full gap-4 bg-orange-500 text-white font-bold
+            <button
+              className="w-full gap-4 bg-orange-500 text-white font-bold
                 py-2 px-4 rounded-lg shadow mt-5 w-full
                 hover:bg-orange-600 transition-all duration-200"
-        >
-          Checkout
-        </button>
+            >
+              Checkout
+            </button>
+          </div>
+        )}
       </article>
     </>
   );

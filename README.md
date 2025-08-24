@@ -42,8 +42,12 @@ Users are able to:
 
 ### Built with
 
+
+- HTML5
+- Vanilla CSS
 - Vite + React
 - Tailwindcss
+
 
 
 ### What I learned

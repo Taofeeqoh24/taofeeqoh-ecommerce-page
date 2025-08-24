@@ -6,9 +6,10 @@ import menu from "../images/icon-menu.svg";
 import close from "../images/icon-close.svg";
 import Cart from "./cart";
 
-function Header() {
+function Header({ cartItems, handleRemoveFromCart }) {
   const [isOpen, setIsOpen] = useState(false);
   const [openCart, SetOpenCart] = useState(false);
+  const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   return (
     <>
       <header
@@ -19,7 +20,7 @@ function Header() {
           <ul className="flex items-center justify-start gap-4">
             {!isOpen && (
               <li onClick={() => setIsOpen(true)} className="lg:hidden">
-                <img src={menu} alt="" className="cursor-pointer w-5" />
+                <img src={menu} alt="menu" className="cursor-pointer w-5" />
               </li>
             )}
             {isOpen && (
@@ -39,8 +40,11 @@ function Header() {
             </li>
           </ul>
 
-          <nav className={isOpen && "open shadow-2xl p-8 lg:shadow-none lg:p-0 "}>
-            <ul className="pt-12 flex items-start flex-col gap-4 lg:flex-row">
+          <nav
+            className={isOpen && "open shadow-2xl p-8 lg:shadow-none lg:p-0 "}
+          >
+            <ul className="pt-12 flex items-start flex-col gap-4 
+                lg:flex-row">
               <li>Collections</li>
               <li>Men</li>
               <li>Women</li>
@@ -58,9 +62,14 @@ function Header() {
                   alt=""
                   className="w-6 h-6 fill-current cursor-pointer text-2xl text-slate-600"
                 />
+                {cartItemCount > 0 && (
+                  <span className="absolute top-8 right-23 bg-orange-500 text-white text-xs rounded-full px-2 py-1 leading-none">
+                    {cartItemCount}
+                  </span>
+                )}
               </button>
             </li>
-            <li>{openCart && <Cart />}</li>
+            <li>{openCart && <Cart openCart={openCart} cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart} />}</li>
             <li>
               <img src={avatar} alt="" className="w-10" />
             </li>

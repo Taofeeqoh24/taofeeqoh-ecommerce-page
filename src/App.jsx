@@ -15,8 +15,9 @@ function App() {
   const [amount, setAmount] = useState(0);
   const [slideIndex, setSlideIndex] = useState(1);
   const [showLightBox, setShowLightBox] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
-  const {mainImage} = products[value];
+  const { mainImage } = products[value];
 
   const handleMinus = () => {
     setAmount(amount - 1);
@@ -39,9 +40,48 @@ function App() {
     }
   };
 
+  const handleAddToCart = () => {
+    // Add if the amount is greater than 0
+    if (amount > 0) {
+      const productToAdd = {
+        id: products[value].id,
+        name: "Autumn Limited Edition Sneakers",
+        price: 125,
+        thumbnail: products[value].thumbnail,
+        quantity: amount,
+      };
+
+      // If the item is already in the cart
+      const existingItem = cartItems.find(
+        (item) => item.id === productToAdd.id
+      );
+
+      if (existingItem) {
+        // If it exists, update the quantity
+        setCartItems(
+          cartItems.map((item) =>
+            item.id === productToAdd.id
+              ? { ...item, quantity: item.quantity + productToAdd.quantity }
+              : item
+          )
+        );
+      } else {
+        // If it doesn't exist, add it to the cart
+        setCartItems([...cartItems, productToAdd]);
+      }
+      // Reset the amount after adding to cart
+      setAmount(0);
+    }
+  };
+
+  // Remove item from the cart
+  const handleRemoveFromCart = (productId) => {
+    setCartItems(cartItems.filter((item) => item.id !== productId));
+  };
+
   return (
     <>
-      <Header />
+      <Header cartItems={cartItems} handleRemoveFromCart={handleRemoveFromCart}/>
       {showLightBox && (
         <Lightbox
           products={products}
@@ -54,7 +94,7 @@ function App() {
 
       <section
         className="max-w-4xl mx-auto grid grid-cols-1 
-      lg:grid-cols-2 gap-10 lg:py-20"
+      lg:grid-cols-2 gap-10 lg:py-20 place-items-center"
       >
         <article>
           <div className="lg:hidden">
@@ -93,10 +133,11 @@ function App() {
               </div>
             ))}
           </div>
-          
+
           <div className="hidden lg:block">
-            <img 
-              src={mainImage} alt="" 
+            <img
+              src={mainImage}
+              alt=""
               className="w-full lg:rounded-2xl cursor-pointer"
               onClick={() => setShowLightBox(true)}
             />
@@ -118,17 +159,18 @@ function App() {
           </ul>
         </article>
 
-        <article className="px-8 pb-10">
+
+        <article className="px-8 pb-10 text-sm">
           <h2
             className="bg-slate-100 py-1 px-2 uppercase 
-          tracking-wide text-sm font-bold inline-block rounded shadow mb-10 text-orange-400"
+          tracking-wide text-sm font-bold inline-block rounded shadow mb-5 text-orange-400"
           >
             Sneaker Company
           </h2>
-          <h1 className="text-slate-900 mb-10 font-bold teext-3xl lg:text-4xl">
+          <h1 className="text-slate-900 mb-8 font-bold teext-3xl lg:text-4xl">
             Fall Limited Edition Sneakers
           </h1>
-          <p className="text-slate-600 mb-10 leading-relaxed">
+          <p className="text-slate-600 mb-5 leading-relaxed">
             These low-profile sneakers are your perfect casual wear companion.
             Featuring a durable rubber outer sole, they’ll withstand everything
             the weather can offer.
@@ -153,7 +195,7 @@ function App() {
             </p>
           </div>
 
-          <div className="mt-10 lg:flex items-center justify-between gap-2">
+          <div className="mt-7 lg:flex items-center justify-between gap-2">
             <ul
               className="flex items-center justify-between 
             bg-slate-100 py-2 px-4 rounded shadow lg:flex-1"
@@ -172,6 +214,7 @@ function App() {
 
             <div className="lg:flex-1">
               <button
+                onClick={handleAddToCart}
                 className="flex items-center justify-center 
                 w-full gap-4 bg-orange-500 text-white font-bold
                 py-2 px-4 rounded-lg shadow mt-5 w-full lg:mt-0 
