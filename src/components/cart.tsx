@@ -1,7 +1,21 @@
-import React from "react";
+// import React from "react";
 import iconDelete from "../images/icon-delete.svg";
 
-function Cart({ cartItems, handleRemoveFromCart, openCart }) {
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  thumbnail?: string;
+}
+
+interface CartProps {
+  cartItems: CartItem[]; 
+  handleRemoveFromCart: (productId: number) => void; 
+  openCart: boolean;
+}
+
+function Cart({ cartItems, handleRemoveFromCart, openCart }: CartProps) {
   return (
     <>
       <article
@@ -63,7 +77,7 @@ function Cart({ cartItems, handleRemoveFromCart, openCart }) {
 
             <button
               className="w-full gap-4 bg-orange-500 text-white font-bold
-                py-2 px-4 rounded-lg shadow mt-5 w-full
+                py-2 px-4 rounded-lg shadow mt-5
                 hover:bg-orange-600 transition-all duration-200"
             >
               Checkout

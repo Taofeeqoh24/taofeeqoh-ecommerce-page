@@ -1,9 +1,23 @@
-import React from "react";
 import prev from "../images/icon-previous.svg";
 import next from "../images/icon-next.svg";
 import close from "../images/icon-close.svg";
+import { JSX } from "react";
 
-function Lightbox({ products, slideIndex, nextSlide, previousSlide, setShowLightBox }) {
+
+export type Product = {
+  id: number;
+  mainImage: string;
+};
+
+type LightboxProps = {
+  products: Product[];
+  slideIndex: number;
+  nextSlide: () => void;
+  previousSlide: () => void;
+  setShowLightBox: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function Lightbox({ products, slideIndex, nextSlide, previousSlide, setShowLightBox } : LightboxProps): JSX.Element {
   return (
     <>
       <article

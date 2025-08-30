@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./index.css";
 import { imgData } from "./data";
 import Header from "./components/header";
@@ -15,7 +15,7 @@ function App() {
   const [amount, setAmount] = useState(0);
   const [slideIndex, setSlideIndex] = useState(1);
   const [showLightBox, setShowLightBox] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const { mainImage } = products[value];
 
@@ -38,6 +38,13 @@ function App() {
     } else if (slideIndex === 1) {
       setSlideIndex(products.length);
     }
+  };
+
+  type CartItem = {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
   };
 
   const handleAddToCart = () => {
@@ -75,7 +82,7 @@ function App() {
   };
 
   // Remove item from the cart
-  const handleRemoveFromCart = (productId) => {
+  const handleRemoveFromCart  = (productId: number) => {
     setCartItems(cartItems.filter((item) => item.id !== productId));
   };
 
@@ -172,7 +179,7 @@ function App() {
           </h1>
           <p className="text-slate-600 mb-5 leading-relaxed">
             These low-profile sneakers are your perfect casual wear companion.
-            Featuring a durable rubber outer sole, they’ll withstand everything
+            Featuring a durable rubber outer sole, they'll withstand everything
             the weather can offer.
           </p>
 
@@ -215,8 +222,7 @@ function App() {
             <div className="lg:flex-1">
               <button
                 onClick={handleAddToCart}
-                className="flex items-center justify-center 
-                w-full gap-4 bg-orange-500 text-white font-bold
+                className="flex items-center justify-center gap-4 bg-orange-500 text-white font-bold
                 py-2 px-4 rounded-lg shadow mt-5 w-full lg:mt-0 
                 hover:bg-orange-600 transition-all duration-200"
               >
